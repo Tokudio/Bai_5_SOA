@@ -259,15 +259,3 @@ SOA_Reporting_Submission/
   .gitignore
 ```
 
-## 9. Lưu ý khi nộp và triển khai
-
-- Bản này dùng **SQLite** cho dễ chấm bài ở bất kỳ máy có .NET 8 SDK; hoàn toàn là một database riêng cho ReportingService. Nếu cô yêu cầu SQL Server, cần đổi EF provider + connection string.
-- Hai demo service có dữ liệu mẫu được tạo **một lần** bằng `EnsureCreated()`. Với hệ thống production nên dùng EF migrations.
-- API cập nhật giá vốn / đồng bộ hiện **chưa có Authentication/Authorization** vì đây là project demo chạy localhost. **Không triển khai public** khi chưa bảo vệ endpoint và xử lý quyền truy cập.
-- Đồng bộ tổng thể bằng HTTP không phải giao dịch phân tán thực sự; nếu nguồn có chỉnh sửa trong lúc đồng bộ, snapshot có thể tạm thời không đồng nhất. Môi trường thật nên dùng event/outbox hoặc watermark để cải tiến.
-- File `.db` được tự tạo khi chạy; ZIP không chứa database đã chạy hay password thật.
-
-## 10. Trạng thái kiểm thử trước khi gửi
-
-- Đã kiểm tra cấu trúc dự án, các JSON cấu hình, những endpoint cần có và tính toán mẫu bằng công cụ offline.
-- **Chưa chạy trực tiếp `dotnet build`, `dotnet run` hay PowerShell smoke test trong môi trường tạo ZIP do môi trường này không có .NET SDK và không thể tải gói mới qua mạng.** Cần chạy `TEST_API_WINDOWS.ps1` trên Windows của bạn để xác nhận tích hợp HTTP thực tế trước khi nộp.
